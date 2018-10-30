@@ -9,6 +9,6 @@ window.onload = function() {
     
     for (var i = 0; i < pieces.length; i++) { 
         pieces[i].classList.add("puzzlepiece"); 
-        pieces[i].setAttribute("style", "left: "+String((i*100)%400)+"px; " + "top: "+String(Math.floor(i/4)*100)+"px;");
+        pieces[i].setAttribute("style", "left: "+String((i*100)%400)+"px; " + "top: "+String(Math.floor(i/4)*100)+"px;" + "background-position: -"+String((i*100)%400)+"px " + String((Math.floor(i/4)*300)%400)+"px;");
     };
 }
