@@ -29,10 +29,10 @@ window.onload = function() {
 
 function enter(){ //hover piece
     if(!win){
-        let p = $("#"+String(this.id)).position();
-        let r = Math.ceil(p.top)/100;
-        let c =  Math.ceil(p.left)/100;
-        if( neighbour(r,c)[0]){
+        let p = $("#"+String(this.id)).position(); //get the value of the piece's 'top' and 'left' attribute
+        let r = Math.ceil(p.top)/100; //vaue of top attribute (0-3)
+        let c =  Math.ceil(p.left)/100; //value of left attribute (0-3)
+        if( neighbour(r,c)[0]){ //check if it's a neighbour
             this.classList.add("movablepiece");
         }
     }
@@ -44,29 +44,45 @@ function leave(){ //leave piece
 
 function pressed(){ //piece pressed
     if(!win){
-        let p = $("#"+String(this.id)).position();
-        let r = Math.ceil(p.top)/100;
-        let c =  Math.ceil(p.left)/100;
+        let p = $("#"+String(this.id)).position(); //get the value of the piece's 'top' and 'left' attribute
+        let r = Math.ceil(p.top)/100; //vaue of top attribute (0-3)
+        let c =  Math.ceil(p.left)/100; //value of left attribute (0-3)
         let pb = neighbour(r,c);
         if(pb[0]){
-        move(this.id, pb[1], r, c); //move piece if can move
+        move(this.id, pb[1], r, c,true); //move piece if can move
         }
     }
 }
 
-function move(id,pos,r,c){ //move piece if it's a neighbour of blank square
+function move(id,pos,r,c,a){ //move piece if it's a neighbour of blank square
     let coord;
     if(pos == "top"){ //if top piece
-        $("#"+id).css("top",String((r+1)*100)+"px"); //move down one row 
+        if(a){
+            aniMoveFromTop(id,r*100,(r+1)*100); //move down one row 
+        }else{
+            $("#"+id).css("top", String((r+1)*100)+"px"); 
+        }
         coord = String(r+1)+String(c);
     }else if(pos == "bottom"){
-        $("#"+id).css("top",String((r-1)*100)+"px"); //move up one row
+        if(a){
+            aniMoveFromBttm(id,r*100,(r-1)*100); //move up one row 
+        }else{
+            $("#"+id).css("top", String((r-1)*100)+"px"); 
+        }
         coord = String(r-1)+String(c);
     }else if(pos == "left"){
-        $("#"+id).css("left", +String((c+1)*100)+"px"); //move right one column
+        if(a){
+            aniMoveFromLeft(id,c*100,(c+1)*100); //move up one row 
+        }else{
+            $("#"+id).css("left", String((c+1)*100)+"px"); 
+        }
         coord = String(r)+String(c+1);
     }else if(pos == "right"){
-        $("#"+id).css("left",String((c-1)*100)+"px"); //move left one column
+        if(a){
+            aniMoveFromRight(id,c*100,(c-1)*100); //move up one row 
+        }else{
+            $("#"+id).css("top", String((c-1)*100)+"px"); 
+        }
         coord = String(r)+String(c-1);
     }
     if(id == coord){ //if current position of piece is the same as its id (which indicates the correct position it should be in)
@@ -94,12 +110,12 @@ function neighbour(r,c){ //check if the row-column of piece is a neighbour of bl
 
 function shufflePieces(){ //shuffle pieces
     win = false; //set win to false for new game since board is now shuffled
-    for(var j = 0; j<100; j++){
+    for(var j = 0; j<50; j++){
         let neighbours = []; //array to hold neighbours of empty square
         for (var k = 0; k < pieces.length; k++) { 
-            let p = $("#"+pieces[k].id).position();
-            let r = Math.ceil(p.top)/100;
-            let c =  Math.ceil(p.left)/100;
+            let p = $("#"+pieces[k].id).position(); //get the value of the piece's 'top' and 'left' attribute
+            let r = Math.ceil(p.top)/100; //vaue of top attribute (0-3)
+            let c =  Math.ceil(p.left)/100; //value of left attribute (0-3)
             let pb = neighbour(r,c);
             if(pb[0]){
                 neighbours.push({"iD": pieces[k].id, "row":r, "col": c, "pos":pb[1]}); //add neighbour to array
@@ -107,7 +123,7 @@ function shufflePieces(){ //shuffle pieces
         }
         
         piece = neighbours[Math.floor(Math.random()*neighbours.length)]; //get random piece that can move
-        move(piece.iD, piece.pos, piece.row, piece.col); //move piece obtained
+        move(piece.iD, piece.pos, piece.row, piece.col,false); //move piece obtained
     }
 }
 
@@ -119,5 +135,57 @@ function checkWin(){ //check is pieces are in correct order/position
     if(final){ // if testWin is true for all then game Won
         alert("You Won!");
         win = true; 
+    }
+}
+
+function aniMoveFromTop(id,cur,fut){
+    var pos = cur;
+    var t = setInterval(frame, 5);
+    function frame() {
+        if (pos == fut) {
+            clearInterval(t);
+        } else {
+            pos++; 
+            $("#"+id).css("top",String(pos)+"px"); 
+        }
+    }
+}
+
+function aniMoveFromBttm(id,cur,fut){
+    var pos = cur;
+    var t = setInterval(frame, 5);
+    function frame() {
+        if (pos == fut) {
+            clearInterval(t);
+        } else {
+            pos--; 
+            $("#"+id).css("top",String(pos)+"px"); 
+        }
+    }
+}
+
+function aniMoveFromLeft(id,cur,fut){
+    var pos = cur;
+    var t = setInterval(frame, 5);
+    function frame() {
+        if (pos == fut) {
+            clearInterval(t);
+        } else {
+            pos++; 
+            $("#"+id).css("left",String(pos)+"px"); 
+        }
+    }
+}
+
+function aniMoveFromRight(id,cur,fut){
+    var pos = cur;
+    var t = setInterval(frame, 5);
+    function frame() {
+        if (pos == fut) {
+            clearInterval(t);
+        } else {
+            pos--; 
+            $("#"+id).css("left",String(pos)+"px"); 
+        }
     }
 }
