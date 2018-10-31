@@ -2,22 +2,22 @@
 //Project 2 - The Fifteen Puzzles
 //ID - 620100200
 
-var empty = {'row': 3, 'col': 3};
-var puzArea;
-var pieces;
-var shuffle;
+var empty = {'row': 3, 'col': 3}; //keep track of the position of the empty square
+var puzArea; //full puzzle area
+var pieces; //nodelist of puzzle pieces
+var shuffle; //shuffle button
 var testWin = {}; //boolen for each piece for whether they in correct spot
 var win = true;
+
 window.onload = function() {
     puzArea = document.getElementById("puzzlearea");
     pieces = puzArea.getElementsByTagName("div");
     shuffle = document.getElementById("shufflebutton");
-
     
     for (var i = 0; i < pieces.length; i++) { 
         pieces[i].classList.add("puzzlepiece"); 
         pieces[i].id = String(Math.floor(i/4)) + String(((i*100)%400)/100); //give each puzzle piece a unique id (rc - row column)
-        testWin[pieces[i].id] =  true;
+        testWin[pieces[i].id] =  true; //initialize testWin for piece to true since they will start off in correct position
         $("#"+pieces[i].id).css({"left":String((i*100)%400)+"px", "top":String(Math.floor(i/4)*100)+"px", "background-position": "-"+String((i*100)%400)+"px " + String((Math.floor(i/4)*300)%400)+"px"})
     };
 
@@ -25,7 +25,6 @@ window.onload = function() {
     $("div.puzzlepiece").click(pressed); //adding event handler for when piece is clicked, it'll move if it can
 
     shuffle.onclick = shufflePieces;
-
 }
 
 function enter(){ //hover piece
@@ -70,11 +69,11 @@ function move(id,pos,r,c){ //move piece if it's a neighbour of blank square
         $("#"+id).css("left",String((c-1)*100)+"px"); //move left one column
         coord = String(r)+String(c-1);
     }
-    if(id == coord){
-        testWin[id] = true;
-        checkWin();
+    if(id == coord){ //if current position of piece is the same as its id (which indicates the correct position it should be in)
+        testWin[id] = true; // set testWin for piece to true since it is in correct position
+        checkWin(); //check if all pieces are in correct position
     }else{
-        testWin[id] = false;
+        testWin[id] = false; //set testWin to false since piece is not in correct position
     }
     empty = {"row": r, "col": c}; //empty coordinates now equals the previous position of piece just pressed
 }
@@ -94,16 +93,16 @@ function neighbour(r,c){ //check if the row-column of piece is a neighbour of bl
 }
 
 function shufflePieces(){ //shuffle pieces
-    win = false;
+    win = false; //set win to false for new game since board is now shuffled
     for(var j = 0; j<100; j++){
-        let neighbours = [];
+        let neighbours = []; //array to hold neighbours of empty square
         for (var k = 0; k < pieces.length; k++) { 
             let p = $("#"+pieces[k].id).position();
             let r = Math.ceil(p.top)/100;
             let c =  Math.ceil(p.left)/100;
             let pb = neighbour(r,c);
             if(pb[0]){
-                neighbours.push({"iD": pieces[k].id, "row":r, "col": c, "pos":pb[1]});
+                neighbours.push({"iD": pieces[k].id, "row":r, "col": c, "pos":pb[1]}); //add neighbour to array
             }
         }
         
@@ -112,13 +111,13 @@ function shufflePieces(){ //shuffle pieces
     }
 }
 
-function checkWin(){
+function checkWin(){ //check is pieces are in correct order/position
     let final = true;
-    for(var j = 0; j < pieces.length; j++){
+    for(var j = 0; j < pieces.length; j++){ //checking if testWin is true for all pieces
          final = final && testWin[pieces[j].id];
     }
-    if(final){
+    if(final){ // if testWin is true for all then game Won
         alert("You Won!");
-        win = true;
+        win = true; 
     }
 }
