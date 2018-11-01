@@ -94,10 +94,10 @@ function shuffleMove(id,pos,r,c){ //move piece if it's a neighbour of blank squa
         $("#"+id).css("left", String((c-1)*100)+"px"); 
         coord = String(r)+String(c-1);
     }
+    empty = {"row": r, "col": c}; //empty coordinates now equals the previous position of piece just pressed
     if(id == coord){ //if current position of piece is the same as its id (which indicates the correct position it should be in)
         undoMove(id); //Undo the move because there is a possibility that shuffle will rearrange the board correctly.
     }
-    empty = {"row": r, "col": c}; //empty coordinates now equals the previous position of piece just pressed
 }
 
 function undoMove(id){
