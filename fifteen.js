@@ -64,7 +64,7 @@ function animateMove(id,pos,r,c){ //move piece if it's a neighbour of blank squa
         aniMoveFromBttm(id,r*100,(r-1)*100); //move up one row 
         coord = String(r-1)+String(c);
     }else if(pos == "left"){
-        aniMoveFromLeft(id,c*100,(c+1)*100); //move up one row 
+        aniMoveFromLeft(id,c*100,(c+1)*100); //move down one row 
         coord = String(r)+String(c+1);
     }else if(pos == "right"){
         aniMoveFromRight(id,c*100,(c-1)*100); //move up one row 
